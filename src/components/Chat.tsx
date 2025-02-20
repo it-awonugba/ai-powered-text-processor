@@ -18,7 +18,6 @@ export default function Chat() {
   const chat = useSelector((state: { chat: ChatState }) => state.chat);
 
   const chatOutputRef = useRef<HTMLDivElement>(null);
-  const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const { messages, error } = chat;
   const allMessages = messages.map((msg) => msg.text).join(" ");

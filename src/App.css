@@ -6,7 +6,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 8rem;
+  min-height: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,6 +84,35 @@
   flex-wrap: wrap;
   border-top: 1px solid #ddd;
   background-color: #f9f9f9;
+}
+
+select {
+  appearance: none; /* Remove default styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  border: 2px solid #4a90e2; /* Blue border */
+  padding: 10px 40px 10px 15px; /* Space for the arrow */
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+
+select {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="%234A90E2"><path d="M7 10l5 5 5-5H7z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+select:hover {
+  border-color: #357abd;
+}
+select:focus {
+  border-color: #2c5ea8;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
 }
 
 .chat-input {
