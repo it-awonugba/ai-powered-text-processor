@@ -104,9 +104,11 @@ export default function Chat() {
           <button onClick={handleTranslate} aria-label="Translate chat text">
             Translate
           </button>
-          <button onClick={handleSummarize} aria-label="Summarize chat text">
-            Summarize
-          </button>
+          {allMessages.length > 150 && (
+            <button onClick={handleSummarize} aria-label="Summarize chat text">
+              Summarize
+            </button>
+          )}
         </div>
       </div>
       <div className="chat-input">

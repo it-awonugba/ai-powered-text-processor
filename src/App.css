@@ -11,6 +11,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 1rem;
 }
 
 .chat-container {
@@ -19,7 +20,7 @@
   border: 1px solid #282c34;
   border-radius: 0.5rem;
   margin-top: 8rem;
-  width: 100%;
+  width: 90%;
   flex: 1;
   position: relative;
   max-width: 600px;
@@ -48,24 +49,6 @@
   flex-direction: column;
   max-height: 400px;
   padding-bottom: 60px;
-}
-
-.chat-output::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chat-output::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.chat-output::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
-}
-
-.chat-output::-webkit-scrollbar-thumb:hover {
-  background: #555;
 }
 
 .chat-output > div {
@@ -111,6 +94,7 @@
   gap: 0.5rem;
   border-top: 1px solid #ddd;
   background-color: #f9f9f9;
+  flex-wrap: wrap;
 }
 
 .chat-input > textarea {
@@ -147,4 +131,60 @@
   font-size: 0.9rem;
   text-align: center;
   margin-top: 0.5rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .App-header {
+    height: 6rem;
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .chat-container {
+    width: 95%;
+    margin-top: 6rem;
+    max-width: 100%;
+  }
+
+  .chat-input {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .chat-input > textarea {
+    font-size: 0.9rem;
+  }
+
+  .chat-input > button,
+  .chat-controls button {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .App-header {
+    height: 5rem;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .chat-container {
+    width: 100%;
+    margin-top: 5rem;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .chat-output {
+    max-height: 300px;
+  }
+
+  .chat-input > button,
+  .chat-controls button {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
 }
