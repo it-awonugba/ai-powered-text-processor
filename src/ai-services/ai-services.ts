@@ -74,9 +74,6 @@ export const summarize = async (text: string, options: SummarizerOptions) => {
       return result;
     } else {
       const summarizer = await ai.summarizer.create(options);
-      summarizer.addEventListener("downloadprogress", (e) => {
-        console.log(e.loaded, e.total);
-      });
       await summarizer.ready;
       const result = await summarizer.summarize(text);
       return result;
