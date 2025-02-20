@@ -78,7 +78,7 @@ export const translateMessage =
   async (dispatch) => {
     translate(text, sourceLanaguage, targetLanguage).then((result) => {
       try {
-        dispatch(setTranslation(result));
+        dispatch(setTranslation(result!));
       } catch (error) {
         dispatch(setError((error as Error).message));
       }

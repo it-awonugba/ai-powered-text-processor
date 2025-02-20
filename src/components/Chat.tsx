@@ -52,6 +52,10 @@ export default function Chat() {
 
   const handleTranslate = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (chat.language === targetLanguage) {
+      dispatch(setError("Text is already translated to this language"));
+      return;
+    }
     dispatch(translateMessage(allMessages, chat.language!, targetLanguage));
   };
 
