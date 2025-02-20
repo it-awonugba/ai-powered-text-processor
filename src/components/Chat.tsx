@@ -56,6 +56,7 @@ export default function Chat() {
       dispatch(setError("Text is already translated to this language"));
       return;
     }
+    dispatch(setError(""));
     dispatch(translateMessage(allMessages, chat.language!, targetLanguage));
   };
 
@@ -65,7 +66,7 @@ export default function Chat() {
       dispatch(setError("Language must be english to summarize"));
       return;
     }
-
+    dispatch(setError(""));
     dispatch(summarizeMessage(allMessages));
   };
 
