@@ -71,7 +71,6 @@ export const summarize = async (text: string, options: SummarizerOptions) => {
     if (isSummarizeCapable === "readily") {
       const summarizer = await ai.summarizer.create(options);
       const result = await summarizer.summarize(text);
-      console.log(result);
       return result;
     } else {
       const summarizer = await ai.summarizer.create(options);
@@ -80,7 +79,6 @@ export const summarize = async (text: string, options: SummarizerOptions) => {
       });
       await summarizer.ready;
       const result = await summarizer.summarize(text);
-      console.log(result);
       return result;
     }
   } else {

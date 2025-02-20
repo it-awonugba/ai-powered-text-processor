@@ -68,8 +68,8 @@ export const detectLanguage =
       detect(message.text).then((result) => {
         dispatch(setLanguage(result));
       });
-    } catch (error: any) {
-      dispatch(setError(error.message));
+    } catch (error) {
+      dispatch(setError((error as Error).message));
     }
   };
 
@@ -79,8 +79,8 @@ export const translateMessage =
     translate(text, sourceLanaguage, targetLanguage).then((result) => {
       try {
         dispatch(setTranslation(result));
-      } catch (error: any) {
-        dispatch(setError(error.message));
+      } catch (error) {
+        dispatch(setError((error as Error).message));
       }
     });
   };
@@ -97,8 +97,8 @@ export const summarizeMessage = (text: string): AppThunk => {
         console.log(result);
         dispatch(setSummary(result));
       });
-    } catch (error: any) {
-      dispatch(setError(error.message));
+    } catch (error) {
+      dispatch(setError((error as Error).message));
     }
   };
 };
