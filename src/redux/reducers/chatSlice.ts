@@ -65,9 +65,8 @@ export const detectLanguage =
   (message: Message): AppThunk =>
   async (dispatch) => {
     try {
-      detect(message.text).then((result) => {
-        dispatch(setLanguage(result));
-      });
+      const result = await detect(message.text);
+      dispatch(setLanguage(result));
     } catch (error) {
       dispatch(setError((error as Error).message));
     }
@@ -76,13 +75,12 @@ export const detectLanguage =
 export const translateMessage =
   (text: string, sourceLanaguage: string, targetLanguage: string): AppThunk =>
   async (dispatch) => {
-    translate(text, sourceLanaguage, targetLanguage).then((result) => {
-      try {
-        dispatch(setTranslation(result!));
-      } catch (error) {
-        dispatch(setError((error as Error).message));
-      }
-    });
+    try {
+      const result = await translate(text, sourceLanaguage, targetLanguage);
+      dispatch(setTranslation(result!));
+    } catch (error) {
+      dispatch(setError((error as Error).message));
+    }
   };
 
 export const summarizeMessage = (text: string): AppThunk => {
@@ -93,10 +91,8 @@ export const summarizeMessage = (text: string): AppThunk => {
         format: "markdown",
         length: "medium",
       };
-      summarize(text, options).then((result) => {
-        console.log(result);
-        dispatch(setSummary(result));
-      });
+      const result = await summarize(text, options);
+      dispatch(setSummary(result));
     } catch (error) {
       dispatch(setError((error as Error).message));
     }
