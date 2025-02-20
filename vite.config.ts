@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 // https://vite.dev/config/
 export default defineConfig({
   define: {
-    "globalThis.ai": "globalThis.ai || {}",
+    "globalThis.ai": "{}",
   },
   plugins: [react()],
 });
