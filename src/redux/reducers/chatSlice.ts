@@ -1,16 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../store";
+import { detect, summarize, translate } from "../../ai-services/ai-services";
 
 export interface Message {
   id: number;
   text: string;
-  language?: string;
-  summary?: string;
-  translation?: string;
 }
 
 export interface ChatState {
   messages: Message[];
+  error?: string;
+  language?: string;
+  summary?: string;
+  translation?: string;
 }
 
 export interface SummarizerOptions {
@@ -26,6 +28,7 @@ const chatSlice = createSlice({
     addMessage: (state, action: PayloadAction<Message>) => {
       state.messages.push(action.payload);
     },
+
     updateMessage: (state, action: PayloadAction<Message>) => {
       const index = state.messages.findIndex(
         (msg) => msg.id === action.payload.id
@@ -34,95 +37,70 @@ const chatSlice = createSlice({
         state.messages[index] = { ...state.messages[index], ...action.payload };
       }
     },
+    setError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    },
+    setLanguage: (state, action: PayloadAction<string>) => {
+      state.language = action.payload;
+    },
+    setTranslation: (state, action: PayloadAction<string>) => {
+      state.translation = action.payload;
+    },
+    setSummary: (state, action: PayloadAction<string>) => {
+      state.summary = action.payload;
+    },
   },
 });
 
-export const { addMessage, updateMessage } = chatSlice.actions;
+export const {
+  addMessage,
+  updateMessage,
+  setLanguage,
+  setTranslation,
+  setSummary,
+  setError,
+} = chatSlice.actions;
 
 export const detectLanguage =
   (message: Message): AppThunk =>
   async (dispatch) => {
-    const capabilities = await ai.languageDetector.capabilities();
-    const isDetectCapabilityAvailable = capabilities.available;
-    let detector;
-    let result;
-
-    if (isDetectCapabilityAvailable === "no") {
-      throw new Error(
-        "Language Detection API is not supported in this browser."
-      );
+    try {
+      detect(message.text).then((result) => {
+        dispatch(setLanguage(result));
+      });
+    } catch (error: any) {
+      dispatch(setError(error.message));
     }
-    if (isDetectCapabilityAvailable === "readily") {
-      detector = await ai.languageDetector.create();
-      result = await detector.detect(message.text);
-      dispatch(
-        updateMessage({ ...message, language: result.detectedLanguage })
-      );
-    } else {
-      detector = await ai.languageDetector.create();
-      await detector.ready;
-      result = await detector.detect(message.text);
-      dispatch(
-        updateMessage({ ...message, language: result[0].detectedLanguage })
-      );
-    }
-
-    dispatch(translateMessage(message, result[0].detectedLanguage, "fr"));
   };
 
 export const translateMessage =
-  (
-    message: Message,
-    sourceLanguage: string,
-    targetLanguage: string
-  ): AppThunk =>
+  (text: string, sourceLanaguage: string, targetLanguage: string): AppThunk =>
   async (dispatch) => {
-    const capabilities = await ai.translator.capabilities();
-    const isTranslationCapable = capabilities.available;
-    if (!isTranslationCapable) {
-      throw new Error("Translation API is not supported in this browser.");
-    }
-    const isTranslateCapabilityAvailable = capabilities.languagePairAvailable(
-      sourceLanguage,
-      targetLanguage
-    );
-    let translator;
-    if (isTranslateCapabilityAvailable === "no") {
-      throw new Error("Source and target language pair are not supported yet.");
-    }
-    if (isTranslateCapabilityAvailable === "readily") {
-      translator = await ai.translator.create({
-        sourceLanguage: sourceLanguage,
-        targetLanguage: targetLanguage,
-      });
-      const result = await translator.translate(message.text);
-
-      dispatch(updateMessage({ ...message, translation: result }));
-    }
+    translate(text, sourceLanaguage, targetLanguage).then((result) => {
+      try {
+        dispatch(setTranslation(result));
+      } catch (error: any) {
+        dispatch(setError(error.message));
+      }
+    });
   };
 
-export const summarizeMessage = (
-  message: Message,
-  options: SummarizerOptions
-): AppThunk => {
+export const summarizeMessage = (text: string): AppThunk => {
   return async (dispatch) => {
-    const capabilities = await ai.summarizer.capabilities();
-    const canSummarize = capabilities.available;
-    let summarizer;
-    let result;
-    if (canSummarize === "no") {
-      throw new Error("Summarization API is not supported in this browser.");
-    }
-    if (canSummarize === "readily") {
-      summarizer = await ai.summarizer.create();
-      result = await summarizer.summarize(message.text);
-      dispatch(updateMessage({ ...message, summary: result }));
-    } else {
-      summarizer = await ai.summarizer.create();
-      await summarizer.ready;
-      result = await summarizer.summarize(message.text);
-      dispatch(updateMessage({ ...message, summary: result }));
+    try {
+      const options: SummarizerOptions = {
+        type: "key-points",
+        format: "markdown",
+        length: "medium",
+      };
+      summarize(text, options).then((result) => {
+        console.log(result);
+        dispatch(setSummary(result));
+      });
+    } catch (error: any) {
+      dispatch(setError(error.message));
     }
   };
 };
+
 export default chatSlice.reducer;
