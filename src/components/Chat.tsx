@@ -10,6 +10,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../redux/store";
+import { SendHorizontal } from "lucide-react";
 
 export default function Chat() {
   const [input, setInput] = useState<string>("");
@@ -118,7 +119,7 @@ export default function Chat() {
           aria-label="Chat input"
         />
         <button onClick={handleSend} aria-label="Send message">
-          ➤
+          <SendHorizontal size={24} arial-label="send button icon" />
         </button>
       </div>
     </section>
